@@ -1,89 +1,271 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Carta para Ezmeralda</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;600&display=swap');
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; width: 100%; overflow: hidden; }
     body {
-      margin: 0;
-      padding: 0;
       font-family: 'Raleway', sans-serif;
-      background-color: #111;
-      color: #fff;
+      background: linear-gradient(to bottom, #f7c7d3 0%, #fff 100%);
+      min-height: 100vh;
+      min-width: 100vw;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
+      position: relative;
     }
-
-    .container {
-      max-width: 900px;
-      padding: 40px;
-      background-color: #1a1a1a;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      overflow-y: auto;
-      max-height: 95vh;
+    .inicio {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      top: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 1s ease;
+      z-index: 2;
+      background: transparent;
+      overflow: hidden;
     }
-
-    h1 {
-      font-weight: 600;
-      font-size: 2em;
-      color: #f0f;
+    .flotantes-inicio {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .flotante {
+      position: absolute;
+      opacity: 0.75;
+      animation: flotar 5s linear infinite;
+      user-select: none;
+    }
+    @keyframes flotar {
+      from { transform: translateY(100vh) scale(1) rotate(0deg); opacity: 0.7; }
+      20% { opacity: 1; }
+      to { transform: translateY(-10vh) scale(1.2) rotate(30deg); opacity: 0; }
+    }
+    .sobre {
+      font-size: 70px;
+      cursor: pointer;
+      transition: transform 0.8s cubic-bezier(.17,.67,.83,.67);
+      color: #ff1f8f;
+      filter: drop-shadow(0 0 10px #ff1f8f55);
+      margin-bottom: 10px;
+      user-select: none;
+      z-index: 8;
+      background: transparent;
+      border: none;
+    }
+    .sobre.abierto {
+      transform: scale(0.8) rotateX(65deg);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .inicio-texto {
+      font-size: 1em;
+      color: #fff;
+      z-index: 4;
+      margin-top: 8px;
       text-align: center;
-      margin-bottom: 20px;
+      text-shadow: 0 2px 6px #ff1f8f55;
+      font-weight: normal;
+      user-select: none;
     }
-
-    p {
-      font-weight: 300;
+    .carta {
+      background-color: #ffffff;
+      padding: 25px 18px 18px 18px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.18);
+      width: 94vw;
+      max-width: 420px;
+      max-height: 90vh;
+      margin: auto;
+      opacity: 0;
+      transition: all 1s cubic-bezier(.17,.67,.83,.67);
+      z-index: 10;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      transform: translate(-50%, -45%) scale(0.85) rotateX(80deg);
+      box-sizing: border-box;
+      pointer-events: none;
+    }
+    .carta.mostrar {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1) rotateX(0deg);
+      pointer-events: auto;
+      transition: all 1s cubic-bezier(.17,.67,.83,.67);
+    }
+    .texto-carta, .firma {
+      color: #222;
+      font-size: 1em;
       line-height: 1.6;
-      font-size: 1.1em;
-      margin-bottom: 15px;
-      text-align: justify;
+      margin-bottom: 13px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: aparecer 0.8s forwards;
+      font-weight: normal;
+      text-align: left;
+      word-break: break-word;
     }
-
+    .texto-carta:nth-of-type(1) { animation-delay: 0.3s; }
+    .texto-carta:nth-of-type(2) { animation-delay: 0.5s; }
+    .texto-carta:nth-of-type(3) { animation-delay: 0.7s; }
+    .texto-carta:nth-of-type(4) { animation-delay: 0.9s; }
+    .texto-carta:nth-of-type(5) { animation-delay: 1.1s; }
+    .texto-carta:nth-of-type(6) { animation-delay: 1.3s; }
     .firma {
-      margin-top: 40px;
+      margin-top: 22px;
+      animation-delay: 1.6s;
+      color: #ff1f8f;
       text-align: right;
-      font-weight: 600;
-      font-size: 1.2em;
-      color: #f0f;
+      font-weight: normal;
+      font-size: 1em;
     }
-
-    @media (max-width: 600px) {
-      .container {
-        padding: 20px;
-      }
+    @keyframes aparecer {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .cerrar-carta {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      font-size: 1.4em;
+      color: #ff1f8f;
+      background: #f7c7d3;
+      border-radius: 50%;
+      width: 2.1em;
+      height: 2.1em;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 1px 6px #0001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 30;
+      transition: background 0.2s, transform 0.15s;
+      font-weight: bold;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .cerrar-carta.mostrar {
+      opacity: 1;
+      pointer-events: auto;
+      transition: opacity 0.3s;
+    }
+    .cerrar-carta:active {
+      background: #fff6fa;
+      transform: scale(0.9);
+    }
+    .flotante[data-symbol="abrazo"] { font-size: 22px; }
+    .carta::-webkit-scrollbar {
+      width: 7px;
+      background: #f7c7d3;
+    }
+    .carta::-webkit-scrollbar-thumb {
+      background: #ff1f8f44;
+      border-radius: 8px;
+    }
+    @media (max-width: 350px) {
+      .carta { padding: 10px 2vw; font-size: 0.95em; }
+      .sobre { font-size: 56px; }
+      .cerrar-carta { font-size: 1.2em; width: 1.5em; height: 1.5em; top: 6px; right: 6px;}
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>(Carta para ti Ezmeralda💖)</h1>
-    <p>
-      No es la primera vez que lo hago pero tampoco será la última vez que te digo que me "IMPORTAS".
-    </p>
-    <p>
-      Han pasado muchos sucesos en este tiempo que hemos estado juntos y sé que te preguntas esto: "¿Y si vale la pena?"
-    </p>
-    <p>
-      A través de mi pensar y de lo que quiero... ¡sí! Para mí sí vale la pena, y mucho. Sé que dudas de que en algún momento pueda fallar, pero eso no pasará, porque eso es lo que deseamos los dos.
-    </p>
-    <p>
-      Sé que lo dices por los problemas de hoy en día, pero hay amor, que eso es lo importante, lo que nos mantiene juntos.
-    </p>
-    <p>
-      Eso es lo que nos da esperanza de un futuro más allá... y tú eres mi ¡PRIORIDAD!.
-    </p>
-    <p style="text-align:center; font-weight:600; color:#f0f; font-size:1.2em;">
-      ✨Mi persona especial, eres mi todo✨
-    </p>
-    <div class="firma">
-      — Con cariño, tu Jonathan🫂✨
-    </div>
+  <div class="inicio" id="pantalla-inicial">
+    <div class="flotantes-inicio" id="flotantes-inicio"></div>
+    <button class="sobre" id="sobre">💌</button>
+    <div class="inicio-texto">Toca el sobre para abrir</div>
   </div>
+  <div class="carta" id="carta">
+    <div class="texto-carta">No es la primera vez que lo hago pero tampoco será la última vez que te digo que me "IMPORTAS". ❤️</div>
+    <div class="texto-carta">Han pasado muchos sucesos en este tiempo que hemos estado juntos y sé que te preguntas esto: "¿Y si vale la pena?" 🫂</div>
+    <div class="texto-carta">A través de mi pensar y de lo que quiero... ¡sí! Para mí sí vale la pena, y mucho. Sé que dudas de que en algún momento pueda fallar, pero eso no pasará, porque eso es lo que deseamos los dos. ❤️</div>
+    <div class="texto-carta">Sé que lo dices por los problemas de hoy en día, pero hay amor, que eso es lo importante, lo que nos mantiene juntos. 🫂</div>
+    <div class="texto-carta">Eso es lo que nos da esperanza de un futuro más allá... y tú eres mi ¡PRIORIDAD!. ❤️</div>
+    <div class="texto-carta" style="text-align: center; color: #ff1f8f;">✨Mi persona especial, eres mi todo✨ ❤️🫂</div>
+    <div class="firma">— Con cariño, tu Jonathan 🫂❤️</div>
+    <!-- Música instrumental fuerte -->
+    <audio id="musica" src="https://cdn.pixabay.com/audio/2022/07/26/audio_125b29a6d8.mp3" loop preload="auto"></audio>
+    <!-- Sonido de carta abriéndose -->
+    <audio id="abrirSonido" src="https://cdn.pixabay.com/audio/2023/06/16/audio_8e2c4ab7c5.mp3" preload="auto"></audio>
+    <!-- Sonido de botón -->
+    <audio id="botonSonido" src="https://cdn.pixabay.com/audio/2022/03/15/audio_115b6a7a6f.mp3" preload="auto"></audio>
+  </div>
+  <button class="cerrar-carta" id="cerrarCarta" title="Regresar al inicio">×</button>
+  <script>
+    // Flotantes de inicio (❤️ y 🫂)
+    const flotantesContainer = document.getElementById('flotantes-inicio');
+    const simbolosFlotantes = ['❤️','🫂','❤️','🫂','❤️','🫂','❤️','🫂','❤️'];
+    for (let i = 0; i < simbolosFlotantes.length; i++) {
+      const flotante = document.createElement('div');
+      flotante.className = 'flotante';
+      flotante.textContent = simbolosFlotantes[i];
+      flotante.style.left = Math.random() * 90 + 'vw';
+      flotante.style.top = Math.random() * 80 + 'vh';
+      flotante.style.animationDuration = (3 + Math.random() * 3) + 's';
+      flotante.style.fontSize = (simbolosFlotantes[i]==='🫂'?22:20) + 'px';
+      flotante.setAttribute('data-symbol', simbolosFlotantes[i]==='🫂'?'abrazo':'corazon');
+      flotantesContainer.appendChild(flotante);
+    }
+
+    const inicio = document.getElementById('pantalla-inicial');
+    const sobre = document.getElementById('sobre');
+    const carta = document.getElementById('carta');
+    const musica = document.getElementById('musica');
+    const abrirSonido = document.getElementById('abrirSonido');
+    const botonSonido = document.getElementById('botonSonido');
+    const cerrarCarta = document.getElementById('cerrarCarta');
+
+    // Abrir carta con animación 3D y música y sonido de carta
+    sobre.addEventListener('click', () => {
+      sobre.classList.add('abierto');
+      inicio.style.opacity = '0';
+      setTimeout(() => {
+        inicio.style.display = 'none';
+        carta.classList.add('mostrar');
+        cerrarCarta.classList.add('mostrar');
+        musica.volume = 0.65;
+        musica.play().catch(()=>{});
+        abrirSonido.currentTime = 0;
+        abrirSonido.volume = 1;
+        abrirSonido.play().catch(()=>{});
+      }, 900);
+    });
+
+    // Regresar al inicio desde la carta
+    cerrarCarta.addEventListener('click', () => {
+      botonSonido.currentTime = 0;
+      botonSonido.volume = 1;
+      botonSonido.play().catch(()=>{});
+      carta.classList.remove('mostrar');
+      cerrarCarta.classList.remove('mostrar');
+      setTimeout(() => {
+        inicio.style.display = '';
+        inicio.style.opacity = '1';
+        sobre.classList.remove('abierto');
+        musica.pause();
+        musica.currentTime = 0;
+      }, 500);
+    });
+
+    // Prevenir reproducción automática
+    musica.pause();
+    musica.currentTime = 0;
+
+    carta.addEventListener('touchmove', (e) => {
+      e.stopPropagation();
+    }, {passive:true});
+  </script>
 </body>
 </html>
